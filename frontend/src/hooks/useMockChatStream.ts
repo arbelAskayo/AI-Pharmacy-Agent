@@ -23,7 +23,6 @@ import { useState, useCallback } from 'react';
 import {
   ChatMessage,
   ToolCallDisplay,
-  ToolResultDisplay,
   ToolEvents,
   StreamEvent,
 } from '../types/chat';
@@ -274,9 +273,6 @@ export function useMockChatStream(): UseMockChatStreamReturn {
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Ref to accumulate streaming content
-  const [streamingContent, setStreamingContent] = useState('');
-  
   const sendMessage = useCallback((text: string) => {
     if (!text.trim() || isStreaming) return;
     
@@ -294,7 +290,6 @@ export function useMockChatStream(): UseMockChatStreamReturn {
     
     // Clear previous tool events for new turn
     setToolEvents({ calls: [], results: [] });
-    setStreamingContent('');
     setIsStreaming(true);
     
     // Get the mock event sequence for this message
@@ -390,7 +385,6 @@ export function useMockChatStream(): UseMockChatStreamReturn {
     setMessages([]);
     setToolEvents({ calls: [], results: [] });
     setError(null);
-    setStreamingContent('');
   }, []);
   
   return {

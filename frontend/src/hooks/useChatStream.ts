@@ -19,7 +19,6 @@ import { useState, useCallback, useRef } from 'react';
 import {
   ChatMessage,
   ToolCallDisplay,
-  ToolResultDisplay,
   ToolEvents,
   StreamEvent,
 } from '../types/chat';
@@ -31,11 +30,11 @@ import {
 /**
  * Get the API base URL.
  * 
- * In development, we use a relative URL so the Vite proxy can forward
- * requests to the backend. This avoids CORS issues.
+ * We use relative URLs by default so that:
+ * - In development: Vite proxy forwards /api/* to backend
+ * - In production (Docker): nginx proxies /api/* to backend
  * 
- * In production or if VITE_API_BASE_URL is explicitly set, we use
- * the configured URL.
+ * Only use VITE_API_BASE_URL if you need to point to a different server.
  */
 const getApiBaseUrl = (): string => {
   // If explicitly set in env, use that
@@ -43,13 +42,8 @@ const getApiBaseUrl = (): string => {
     return import.meta.env.VITE_API_BASE_URL;
   }
   
-  // In development, use relative URL for Vite proxy
-  if (import.meta.env.DEV) {
-    return ''; // Relative URL, Vite proxy handles /api/*
-  }
-  
-  // Default fallback
-  return 'http://127.0.0.1:8000';
+  // Default: relative URL (works with both Vite proxy and nginx proxy)
+  return '';
 };
 
 // Check if we're in development mode for debug logging
