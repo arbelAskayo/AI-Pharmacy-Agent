@@ -25,6 +25,8 @@ async def health_check() -> HealthResponse:
     return HealthResponse(
         status="ok",
         database=db_status,
-        openai=openai_status
+        openai=openai_status,
+        llm_enabled=settings.openai_configured,
+        evaluation_doc="docs/evaluation_plan.md"
     )
 
