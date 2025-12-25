@@ -2,19 +2,40 @@
  * ChatPage Component
  * 
  * The main chat interface that combines all chat-related components.
+ * 
+ * MOCK vs LIVE MODE:
+ * - By default, uses the real backend (useChatStream).
+ * - Set VITE_USE_MOCK_STREAM=true in .env to use mock mode (useMockChatStream).
+ * - A toggle button in the header allows switching at runtime for testing.
+ * 
  * Layout:
- * - Header: App title and mock indicator
+ * - Header: App title, mode badge, and controls
  * - Main area: Message list + Tool events panel
  * - Footer: Message input
  */
 
+import { useState } from 'react';
 import { useMockChatStream } from '../hooks/useMockChatStream';
+import { useChatStream } from '../hooks/useChatStream';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
 import { ToolEventList } from './ToolEventList';
 import './ChatPage.css';
 
+// Check environment variable for default mode
+// If VITE_USE_MOCK_STREAM is 'true', default to mock mode
+const defaultUseMock = import.meta.env.VITE_USE_MOCK_STREAM === 'true';
+
 export function ChatPage() {
+  // Allow runtime toggle between mock and live mode
+  const [useMock, setUseMock] = useState(defaultUseMock);
+  
+  // Use the appropriate hook based on mode
+  // Note: Both hooks have the same interface, so we can use them interchangeably
+  const mockHook = useMockChatStream();
+  const liveHook = useChatStream();
+  
+  // Select the active hook
   const { 
     messages, 
     toolEvents, 
@@ -22,7 +43,14 @@ export function ChatPage() {
     error,
     sendMessage,
     clearMessages,
-  } = useMockChatStream();
+  } = useMock ? mockHook : liveHook;
+  
+  // Toggle between mock and live mode
+  const toggleMode = () => {
+    // Clear messages when switching modes to avoid confusion
+    clearMessages();
+    setUseMock(!useMock);
+  };
   
   return (
     <div className="chat-page">
@@ -33,7 +61,14 @@ export function ChatPage() {
             <span className="header-icon">💊</span>
             Pharmacy Assistant
           </h1>
-          <span className="mock-badge">Mock UI</span>
+          <button 
+            className={`mode-badge ${useMock ? 'mock' : 'live'}`}
+            onClick={toggleMode}
+            disabled={isStreaming}
+            title={`Click to switch to ${useMock ? 'Live' : 'Mock'} mode`}
+          >
+            {useMock ? '🔶 Mock' : '🟢 Live'}
+          </button>
         </div>
         {messages.length > 0 && (
           <button 
@@ -75,4 +110,3 @@ export function ChatPage() {
     </div>
   );
 }
-

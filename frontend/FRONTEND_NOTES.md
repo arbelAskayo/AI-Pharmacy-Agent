@@ -10,17 +10,65 @@ This is the React frontend for the Pharmacy Assistant chat application. It provi
 # Install dependencies
 npm install
 
-# Start development server
+# Start development server (Live mode - connects to backend)
 npm run dev
+
+# Start in Mock mode (no backend needed)
+VITE_USE_MOCK_STREAM=true npm run dev
 ```
 
 The app will be available at `http://localhost:5173`.
 
-## Current Status: Mock Mode
+## Mock vs Live Mode
 
-**Important:** This version uses a mock streaming hook (`useMockChatStream`) instead of connecting to the real backend. This allows UI development and testing without needing the backend running.
+The frontend supports two modes:
 
-In **Milestone 5**, we will replace the mock hook with a real SSE client that connects to `POST /api/chat`.
+### Live Mode (Default)
+- Connects to the real backend at `POST /api/chat`
+- Requires the backend to be running with a valid OpenAI API key
+- Shows real tool calls and streaming responses
+
+### Mock Mode
+- Uses simulated responses (no backend needed)
+- Great for UI development and testing
+- Responds to keywords like "stock", "aspirin", "refill"
+
+### How to Switch Modes
+
+**Option 1: Environment Variable**
+```bash
+# Mock mode
+VITE_USE_MOCK_STREAM=true npm run dev
+
+# Live mode (default)
+npm run dev
+```
+
+**Option 2: Runtime Toggle**
+Click the mode badge in the header (🔶 Mock / 🟢 Live) to switch at runtime.
+
+## Running End-to-End (Live Mode)
+
+1. **Start the backend** (in the `backend/` directory):
+   ```bash
+   cd backend
+   source .venv/bin/activate  # or create venv if needed
+   uvicorn main:app --reload --host 0.0.0.0 --port 8000
+   ```
+   Make sure `OPENAI_API_KEY` is set in `backend/.env`.
+
+2. **Start the frontend** (in the `frontend/` directory):
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+3. **Open the app**: http://localhost:5173
+
+4. **Test queries**:
+   - "Do you have ibuprofen in stock?" → Tool call + streamed response
+   - "Should I take aspirin for my headache?" → Safety refusal (no tools)
+   - "יש לכם אספירין במלאי?" → Hebrew response with tool calls
 
 ## Project Structure
 
@@ -36,7 +84,8 @@ frontend/
 │   │   └── chat.ts           # TypeScript interfaces for chat types
 │   │
 │   ├── hooks/
-│   │   └── useMockChatStream.ts  # Mock streaming hook (replaced in Milestone 5)
+│   │   ├── useChatStream.ts      # Real SSE client (Live mode)
+│   │   └── useMockChatStream.ts  # Mock streaming (Mock mode)
 │   │
 │   └── components/
 │       ├── ChatPage.tsx      # Main chat page layout
@@ -63,7 +112,7 @@ frontend/
 
 ### ChatPage
 The main container that orchestrates all chat components:
-- Header with title and "Clear Chat" button
+- Header with title, mode toggle, and "Clear Chat" button
 - Message list area (scrollable)
 - Tool events panel (collapsible, shows tool calls and results)
 - Message input footer
@@ -91,6 +140,39 @@ Text input with:
 - Disabled state during streaming
 - Send button with loading indicator
 
+## Hooks
+
+### useChatStream (Live Mode)
+
+Connects to the real backend via SSE:
+
+```typescript
+const { messages, toolEvents, isStreaming, error, sendMessage, clearMessages } = useChatStream();
+```
+
+**How it works:**
+1. `sendMessage(text)` adds a user message and sends POST to `/api/chat`
+2. Reads the SSE stream using `fetch()` + `ReadableStream`
+3. Parses `data: {json}\n\n` lines and dispatches to state
+4. Handles: `tool_call`, `tool_result`, `assistant_token`, `final_message`, `error`
+
+**Configuration:**
+- `VITE_API_BASE_URL`: Backend URL (default: `http://127.0.0.1:8000`)
+
+### useMockChatStream (Mock Mode)
+
+Simulates backend behavior for offline development:
+
+```typescript
+const { messages, toolEvents, isStreaming, error, sendMessage, clearMessages } = useMockChatStream();
+```
+
+**Mock scenarios:**
+- Keywords "stock", "available", "aspirin" → Stock check flow
+- Keywords "מלאי", "אספירין" → Hebrew stock check
+- Keywords "refill", "prescription" → Prescription refill flow
+- Default → Safety refusal
+
 ## TypeScript Types
 
 All types are defined in `src/types/chat.ts`:
@@ -108,26 +190,12 @@ All types are defined in `src/types/chat.ts`:
 - `ToolResultDisplay` - Tool result for UI display
 - `ToolEvents` - Combined calls and results
 
-## How the Mock Streaming Hook Works
+## Environment Variables
 
-`useMockChatStream` simulates the backend's SSE behavior:
-
-1. When `sendMessage(text)` is called:
-   - Adds user message to state
-   - Selects a mock scenario based on keywords in the message
-   - Creates a sequence of mock `StreamEvent` objects
-
-2. Events are "streamed" with 50ms delays between each:
-   - `tool_call` → Adds to toolEvents.calls
-   - `tool_result` → Updates call status, adds to toolEvents.results
-   - `assistant_token` → Accumulates in the assistant message
-   - `final_message` → Finalizes the message, stops streaming
-
-3. Mock scenarios:
-   - **Stock check**: Keywords "stock", "available", "aspirin"
-   - **Hebrew stock**: Keywords "מלאי", "אספירין"
-   - **Prescription refill**: Keywords "refill", "prescription"
-   - **Default**: Safety refusal (no tools, redirects to pharmacist)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_BASE_URL` | Backend API URL | `http://127.0.0.1:8000` |
+| `VITE_USE_MOCK_STREAM` | Use mock mode if `true` | `false` |
 
 ## Styling
 
@@ -137,11 +205,13 @@ All types are defined in `src/types/chat.ts`:
 - Font stack includes Hebrew fonts (Heebo, Assistant, Rubik)
 - `dir="auto"` enables automatic RTL for Hebrew text
 
-## Next Steps (Milestone 5)
+## Debugging
 
-In the next milestone, we will:
-1. Create `src/hooks/useChatStream.ts` - Real SSE client
-2. Connect to `POST /api/chat` using fetch streaming
-3. Parse SSE events and update state
-4. Replace `useMockChatStream` with `useChatStream` in ChatPage
+In development mode (`npm run dev`), the `useChatStream` hook logs SSE events to the console:
+```
+[SSE Event] tool_call { type: 'tool_call', tool_call_id: '...', name: '...', arguments: {...} }
+[SSE Event] tool_result { type: 'tool_result', ... }
+[SSE Event] assistant_token { type: 'assistant_token', content: '...' }
+```
 
+Check the browser's Network tab to see the raw SSE stream from `/api/chat`.
