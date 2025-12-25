@@ -1,31 +1,63 @@
-# Docker Compose configuration for Pharmacy Assistant
-# Full implementation will come in Milestone 8
-
-version: '3.8'
+# Pharmacy Assistant - Docker Compose Configuration
+# 
+# Quick start:
+#   1. Copy backend/.env.example to backend/.env and set OPENAI_API_KEY
+#   2. docker compose build
+#   3. docker compose up
+#
+# Ports:
+#   - Frontend: http://localhost:3000
+#   - Backend API: http://localhost:8000
 
 services:
+  # ============================================================
+  # Backend: FastAPI + SQLite + OpenAI
+  # ============================================================
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     env_file:
       - ./backend/.env
+    environment:
+      # Override env file values if set in shell environment
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - DATABASE_URL=sqlite:///./pharmacy.db
+      - LOG_LEVEL=INFO
     volumes:
-      - ./backend:/app
-      - pharmacy-data:/app/data
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-    # Dockerfile to be added in Milestone 8
+      # Persist the SQLite database between container restarts
+      - pharmacy-db:/app/backend
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
 
+  # ============================================================
+  # Frontend: React SPA served via nginx
+  # ============================================================
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:80"
-    environment:
-      - VITE_API_BASE_URL=http://localhost:8000
     depends_on:
-      - backend
-    # Dockerfile to be added in Milestone 8
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
 
+# Named volume for SQLite persistence
 volumes:
-  pharmacy-data:
-
+  pharmacy-db:
