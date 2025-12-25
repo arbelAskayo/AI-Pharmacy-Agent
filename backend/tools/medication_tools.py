@@ -5,6 +5,7 @@ from typing import Optional, Literal
 from repositories import medication_repo, stock_repo
 from tools.errors import tool_success, tool_error, ToolErrorCode
 from logging_config import get_logger
+from utils.normalization import normalize_text
 
 logger = get_logger(__name__)
 
@@ -90,9 +91,11 @@ def check_medication_stock(
             f"Medication '{medication_name}' not found in our database"
         )
     
-    # Get stock data
+    # Get stock data (normalize branch name for flexible matching)
     if branch:
-        stock_item = stock_repo.get_stock_at_branch(medication["id"], branch)
+        # Normalize branch input (trim whitespace)
+        normalized_branch = normalize_text(branch)
+        stock_item = stock_repo.get_stock_at_branch(medication["id"], normalized_branch)
         if not stock_item:
             return tool_error(
                 ToolErrorCode.NOT_FOUND, 

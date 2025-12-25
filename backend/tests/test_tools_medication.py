@@ -107,6 +107,29 @@ class TestCheckMedicationStock:
         assert result["success"] is False
         assert result["error"]["code"] == "NOT_FOUND"
     
+    def test_stock_branch_name_variations(self):
+        """Should find stock regardless of branch name formatting."""
+        # Test various formats of "Main Street"
+        result1 = check_medication_stock("Aspirin", branch="Main Street")
+        result2 = check_medication_stock("Aspirin", branch="main street")
+        result3 = check_medication_stock("Aspirin", branch="MainStreet")
+        result4 = check_medication_stock("Aspirin", branch="main-street")
+        result5 = check_medication_stock("Aspirin", branch="MAIN STREET")
+        
+        # All should succeed
+        assert result1["success"] is True
+        assert result2["success"] is True
+        assert result3["success"] is True
+        assert result4["success"] is True
+        assert result5["success"] is True
+        
+        # All should return the same branch data
+        assert result1["data"]["branches"][0]["branch"] == "Main Street"
+        assert result2["data"]["branches"][0]["branch"] == "Main Street"
+        assert result3["data"]["branches"][0]["branch"] == "Main Street"
+        assert result4["data"]["branches"][0]["branch"] == "Main Street"
+        assert result5["data"]["branches"][0]["branch"] == "Main Street"
+    
     def test_stock_response_structure(self):
         """Should have correct response structure with Hebrew name."""
         result = check_medication_stock("Ibuprofen")
