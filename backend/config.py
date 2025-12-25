@@ -16,8 +16,8 @@ class Settings(BaseSettings):
     )
     
     # OpenAI Configuration
-    openai_api_key: str = ""  # Required for chat, but allow empty for health check
-    openai_model: str = "gpt-5"  # Default to gpt-5 as per assignment
+    openai_api_key: str = ""  # Required for chat, loaded from .env
+    openai_model: str = "gpt-4o"  # Default model (gpt-5 when available)
     
     # Database Configuration
     database_url: str = "sqlite:///./pharmacy.db"
