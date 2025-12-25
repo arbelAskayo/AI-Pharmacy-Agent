@@ -1,8 +1,9 @@
 """
 OpenAI client wrapper.
 Centralizes OpenAI API usage with proper configuration.
+Supports both synchronous and streaming chat completions.
 """
-from typing import Optional
+from typing import Optional, Iterator
 from openai import OpenAI
 from config import settings
 from logging_config import get_logger
@@ -11,6 +12,11 @@ logger = get_logger(__name__)
 
 # Initialize OpenAI client (lazy initialization)
 _client: Optional[OpenAI] = None
+
+
+def is_openai_configured() -> bool:
+    """Check if OpenAI API key is properly configured."""
+    return settings.openai_configured
 
 
 def get_client() -> OpenAI:
@@ -123,5 +129,60 @@ def create_chat_completion(
         
     except Exception as e:
         logger.error("openai_error", error=str(e))
+        raise
+
+
+def stream_chat_completion(
+    messages: list[dict],
+    tools: Optional[list[dict]] = None,
+    tool_choice: str = "none"
+) -> Iterator[str]:
+    """
+    Create a streaming chat completion for the final answer.
+    Yields text delta chunks as they arrive.
+    
+    Args:
+        messages: List of message dicts with 'role' and 'content'
+        tools: Optional list of tool schemas (usually None for final answer)
+        tool_choice: How to handle tools - default "none" for final streaming
+        
+    Yields:
+        Text delta strings as they are received
+    """
+    client = get_client()
+    
+    # Build request parameters
+    params = {
+        "model": settings.openai_model,
+        "messages": messages,
+        "stream": True,
+    }
+    
+    # Add tools if provided (usually we disable for final streaming)
+    if tools:
+        params["tools"] = tools
+        params["tool_choice"] = tool_choice
+    
+    logger.info(
+        "openai_stream_request",
+        model=settings.openai_model,
+        message_count=len(messages),
+        has_tools=bool(tools)
+    )
+    
+    try:
+        stream = client.chat.completions.create(**params)
+        
+        for chunk in stream:
+            # Extract text delta from the chunk
+            if chunk.choices and len(chunk.choices) > 0:
+                delta = chunk.choices[0].delta
+                if delta and delta.content:
+                    yield delta.content
+        
+        logger.info("openai_stream_complete")
+        
+    except Exception as e:
+        logger.error("openai_stream_error", error=str(e))
         raise
 
