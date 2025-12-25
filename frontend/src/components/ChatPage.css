@@ -38,14 +38,40 @@
   font-size: 28px;
 }
 
-.mock-badge {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 12px;
+/* Mode badge - clickable button to toggle between mock and live */
+.mode-badge {
+  padding: 6px 14px;
   border-radius: 16px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-badge.mock {
+  background: rgba(255, 193, 7, 0.9);
+  color: #333;
+}
+
+.mode-badge.mock:hover:not(:disabled) {
+  background: rgba(255, 193, 7, 1);
+}
+
+.mode-badge.live {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.mode-badge.live:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 1);
+}
+
+.mode-badge:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .clear-button {
@@ -126,9 +152,9 @@
     font-size: 22px;
   }
   
-  .mock-badge {
+  .mode-badge {
     font-size: 10px;
-    padding: 3px 8px;
+    padding: 4px 10px;
   }
   
   .chat-content,

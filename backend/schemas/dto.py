@@ -10,6 +10,8 @@ class HealthResponse(BaseModel):
     status: str
     database: str
     openai: str
+    llm_enabled: bool = False
+    evaluation_doc: str = "docs/evaluation_plan.md"
 
 
 class UserDTO(BaseModel):
