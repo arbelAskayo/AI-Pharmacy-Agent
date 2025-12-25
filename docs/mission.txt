@@ -1,0 +1,80 @@
+Wonderful – Agent Engineer Home Assignment
+Pharmacy Chat Agent (Real-time, Tool-Using, Bilingual)
+
+1) Goal
+Build an enterprise-style AI-powered pharmacist assistant for a retail pharmacy chain.
+The agent serves customers through chat and uses data from internal systems (our synthetic DB).
+
+2) Hard Requirements (must-have)
+- OpenAI GPT-5 based agent with real-time text streaming.
+- Stateless: every chat request includes the full conversation context needed for that turn.
+- Bilingual: Hebrew + English.
+- Tools (function calling): the agent must use backend tools to fetch/act on data (no hallucinated DB facts).
+- Synthetic database: 10 users + 5 medications (+ whatever related tables you need: prescriptions, stock, etc.).
+- UI: user can chat with the agent and the UI must show tool calls (name/args/results).
+- Multi-step flows: implement at least 3 distinct multi-step flows end-to-end.
+- Evaluation plan: document how we evaluate flows (including Hebrew coverage and variations).
+- Docker: project must run via Docker (ideally docker-compose for frontend+backend).
+- Vanilla OpenAI API only: no LangChain or similar frameworks.
+
+3) Safety / Policy Constraints (non-negotiable)
+- Provide factual information about medications (from DB only).
+- Explain dosage/usage instructions ONLY as factual label-style info stored in DB.
+- Confirm prescription requirements from DB.
+- Check availability in stock from DB.
+- Identify active ingredients from DB.
+- NO medical advice, NO diagnosis, NO encouragement to purchase.
+- If user asks for advice (“should I take X for Y?”, “is it safe for me?”), refuse and redirect to a healthcare professional.
+
+4) Deliverables / Evidence
+- Public GitHub repository with runnable Docker setup.
+- Evidence: 2–3 screenshots of conversations showing tool calls and multi-step flows.
+- Evaluation plan for flows.
+IMPORTANT: The assignment explicitly says the README.md must be written by me (Arbel) and not by an LLM.
+Cursor may help with a checklist/outline, but must NOT generate the final README content.
+
+5) Chosen Implementation Stack (decision for this repo)
+Backend:
+- Python + FastAPI
+- SQLite database (synthetic seed data)
+- Server-Sent Events (SSE) for streaming from backend to UI
+- OpenAI Responses API + tool/function calling loop (vanilla OpenAI SDK)
+
+Frontend:
+- React + Vite
+- Chat UI that renders:
+  (a) streaming assistant message tokens
+  (b) tool call “cards” showing tool_name, args, and tool results/errors
+
+6) Architecture Expectations (high-level)
+- Frontend sends: conversation history + new user message (stateless).
+- Backend calls OpenAI with tools schema.
+- If model requests tool calls:
+  - Backend executes the tool(s) against SQLite.
+  - Backend sends tool results back to the model.
+- Backend streams events to UI (SSE), including:
+  - assistant_token: text chunks
+  - tool_call: name + args
+  - tool_result: output or error
+  - final_message: completed assistant response
+  - error: unexpected errors
+- Keep OpenAI API key server-side only (never in frontend).
+
+7) Development Workflow (how we’ll work with Cursor)
+- Cursor must PLAN FIRST: propose architecture + contracts + DB schema + tools + UI state model.
+- Only after I approve the plan, Cursor implements in small milestones.
+- Prefer small, reviewable commits; keep changes focused.
+- Provide simple manual test steps after each milestone.
+- Avoid over-engineering: correctness + clarity + reliability > fancy features.
+
+8) Suggested Multi-step Flows (at least 3)
+Flow A: Medication info + prescription requirement + active ingredients
+Flow B: Stock availability near branch + (optional) reservation simulation
+Flow C: Prescription refill request simulation (user lookup -> prescription validation -> create request)
+
+9) What “good” looks like
+- Streaming works smoothly (no UI freezing).
+- Tool calls are visible and easy to understand.
+- Flows succeed with clarifying questions on ambiguous inputs.
+- Strong policy adherence (no medical advice).
+- Works in both Hebrew and English.
