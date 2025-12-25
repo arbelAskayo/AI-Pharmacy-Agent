@@ -5,6 +5,7 @@ from typing import Optional
 from repositories import user_repo
 from tools.errors import tool_success, tool_error, ToolErrorCode
 from logging_config import get_logger
+from utils.normalization import normalize_phone, normalize_email, normalize_text
 
 logger = get_logger(__name__)
 
@@ -46,18 +47,22 @@ def get_user_profile(
                 f"User with ID {user_id} not found"
             )
     
-    # Try phone number
+    # Try phone number (normalize to handle different formats)
     elif phone:
-        user = user_repo.find_user_by_search_term(phone)
+        # Normalize and validate phone
+        normalized_phone = normalize_text(phone)
+        user = user_repo.find_user_by_search_term(normalized_phone)
         if not user:
             return tool_error(
                 ToolErrorCode.NOT_FOUND, 
                 f"No user found with phone number matching '{phone}'"
             )
     
-    # Try email
+    # Try email (normalize to handle case and whitespace)
     elif email:
-        user = user_repo.find_user_by_search_term(email)
+        # Normalize and validate email
+        normalized_email = normalize_text(email)
+        user = user_repo.find_user_by_search_term(normalized_email)
         if not user:
             return tool_error(
                 ToolErrorCode.NOT_FOUND, 
