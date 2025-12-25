@@ -1,0 +1,53 @@
+/* ToolEventList Styles */
+
+.tool-event-list {
+  background: #F8F9FA;
+  border-top: 1px solid #E0E0E0;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-list-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  width: 100%;
+  text-align: left;
+}
+
+.tool-list-header:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.header-icon {
+  font-size: 16px;
+}
+
+.header-title {
+  flex: 1;
+}
+
+.expand-icon {
+  transition: transform 0.2s ease;
+  font-size: 10px;
+  color: #666;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.tool-list-content {
+  padding: 0 16px 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+

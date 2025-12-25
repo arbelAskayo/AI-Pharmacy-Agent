@@ -1,0 +1,92 @@
+/* Global styles and CSS reset */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 
+    -apple-system, 
+    BlinkMacSystemFont, 
+    'Segoe UI', 
+    'Roboto', 
+    'Oxygen', 
+    'Ubuntu', 
+    'Cantarell', 
+    'Fira Sans', 
+    'Droid Sans', 
+    'Helvetica Neue', 
+    /* Hebrew font support */
+    'Heebo',
+    'Assistant',
+    'Rubik',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #F5F5F5;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Ensure proper RTL/LTR handling for Hebrew */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #4A90D9;
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CCC;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AAA;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(74, 144, 217, 0.3);
+}
+
+/* Link styling */
+a {
+  color: #4A90D9;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Button reset */
+button {
+  font-family: inherit;
+}
+
+/* Root element */
+#root {
+  height: 100%;
+}
+

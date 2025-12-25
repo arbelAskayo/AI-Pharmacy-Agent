@@ -1,0 +1,62 @@
+/* MessageList Styles */
+
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 0;
+  scroll-behavior: smooth;
+}
+
+.message-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  max-width: 400px;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 22px;
+}
+
+.empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.example-prompts {
+  margin-top: 24px;
+  padding: 16px;
+  background: #F8F9FA;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.example-prompts p {
+  margin: 0 0 8px 0;
+  color: #555;
+}
+
+.example-prompts ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.example-prompts li {
+  margin: 6px 0;
+  color: #4A90D9;
+  font-style: italic;
+}
+
