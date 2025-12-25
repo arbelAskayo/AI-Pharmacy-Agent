@@ -57,7 +57,7 @@ export function ToolEventCard({ call, result }: ToolEventCardProps) {
         <code>{formatArguments(call.arguments)}</code>
       </div>
       
-      {result && result.success && result.result && (
+      {result && result.success && result.result !== undefined && (
         <div className="tool-result">
           <span className="label">Result:</span>
           <pre>{JSON.stringify(result.result, null, 2)}</pre>

@@ -19,7 +19,6 @@ import { useState, useCallback, useRef } from 'react';
 import {
   ChatMessage,
   ToolCallDisplay,
-  ToolResultDisplay,
   ToolEvents,
   StreamEvent,
 } from '../types/chat';

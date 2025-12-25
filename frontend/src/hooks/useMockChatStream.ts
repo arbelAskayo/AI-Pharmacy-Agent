@@ -23,7 +23,6 @@ import { useState, useCallback } from 'react';
 import {
   ChatMessage,
   ToolCallDisplay,
-  ToolResultDisplay,
   ToolEvents,
   StreamEvent,
 } from '../types/chat';
