@@ -1,0 +1,112 @@
+/* ToolEventCard Styles */
+
+.tool-event-card {
+  background: #FFF;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #E0E0E0;
+  font-size: 13px;
+}
+
+.tool-event-card.pending {
+  border-left: 3px solid #F59E0B;
+  background: #FFFBEB;
+}
+
+.tool-event-card.success {
+  border-left: 3px solid #10B981;
+  background: #F0FDF4;
+}
+
+.tool-event-card.error {
+  border-left: 3px solid #EF4444;
+  background: #FEF2F2;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tool-icon {
+  font-size: 14px;
+}
+
+.tool-name {
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.tool-status {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.tool-status.pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.tool-status.success {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.tool-status.error {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.tool-arguments,
+.tool-result,
+.tool-error {
+  margin-top: 8px;
+}
+
+.tool-arguments .label,
+.tool-result .label,
+.tool-error .label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.tool-arguments code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: block;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.tool-result pre {
+  background: rgba(0, 0, 0, 0.03);
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 11px;
+  overflow-x: auto;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.tool-error code {
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: block;
+}
+
