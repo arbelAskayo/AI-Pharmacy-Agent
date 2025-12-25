@@ -10,7 +10,7 @@ from config import settings
 from logging_config import configure_logging, get_logger
 from database import init_db
 from seed_data import seed_database
-from routers import health, medications
+from routers import health, medications, chat_debug
 
 
 # Configure logging first
@@ -60,6 +60,7 @@ app.add_middleware(
 # Include routers
 app.include_router(health.router)
 app.include_router(medications.router)
+app.include_router(chat_debug.router)
 
 
 @app.get("/")
