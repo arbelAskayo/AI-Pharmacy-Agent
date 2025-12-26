@@ -77,12 +77,20 @@ CREATE TABLE users (
 - `phone`: Phone number (format: `XXX-XXXXXXX`)
 - `email`: Email address
 
-**Sample Data:**
+**Complete User List (All 10 Users):**
+
 | id | name | hebrew_name | phone | email |
 |----|------|-------------|-------|-------|
 | 1 | David Cohen | דוד כהן | 050-1234567 | david.cohen@email.com |
 | 2 | Sarah Levi | שרה לוי | 052-2345678 | sarah.levi@email.com |
 | 3 | Michael Ben-Ari | מיכאל בן-ארי | 054-3456789 | michael.benari@email.com |
+| 4 | Rachel Goldstein | רחל גולדשטיין | 053-4567890 | rachel.gold@email.com |
+| 5 | Yossi Mizrachi | יוסי מזרחי | 050-5678901 | yossi.m@email.com |
+| 6 | Miriam Shapiro | מרים שפירא | 052-6789012 | miriam.shapiro@email.com |
+| 7 | Avi Peretz | אבי פרץ | 054-7890123 | avi.peretz@email.com |
+| 8 | Tamar Rosenberg | תמר רוזנברג | 053-8901234 | tamar.r@email.com |
+| 9 | Dan Katz | דן כץ | 050-9012345 | dan.katz@email.com |
+| 10 | Noa Friedman | נועה פרידמן | 052-0123456 | noa.friedman@email.com |
 
 **Notes:**
 - Phone numbers can be looked up in any format (with/without hyphens, spaces)
@@ -180,20 +188,37 @@ CREATE TABLE prescriptions (
 - Expired prescriptions: **4**
 - No refills remaining: **4**
 
-**Sample Prescriptions:**
-```sql
--- Active prescription with refills
-Rx #1: David Cohen - Omeprazole
-  Prescribed: 2025-10-26 | Expires: 2026-10-26
-  Refills: 3 remaining (used 2 of 5)
-  Doctor: Dr. Ruth Avraham
+**Complete Prescription List (All 15 Prescriptions):**
 
--- Expired prescription
-Rx #3: Michael Ben-Ari - Omeprazole
-  Prescribed: 2024-11-20 | Expired: 2025-11-20
-  Refills: All used (3 of 3)
-  Doctor: Dr. Yael Stern
-```
+| Rx# | Patient | Medication | Prescribed | Expires | Refills (Used/Total) | Doctor | Status |
+|-----|---------|------------|------------|---------|---------------------|--------|--------|
+| 1 | David Cohen | Omeprazole | 2025-10-26 | 2026-10-26 | 2/5 (3 left) | Dr. Ruth Avraham | ✅ ACTIVE |
+| 2 | Sarah Levi | Amoxicillin | 2025-12-22 | 2026-01-01 | 0/0 | Dr. Moshe Klein | ⚠️ NO REFILLS |
+| 3 | Michael Ben-Ari | Omeprazole | 2024-11-20 | 2025-11-20 | 3/3 | Dr. Yael Stern | ❌ EXPIRED |
+| 4 | Rachel Goldstein | Omeprazole | 2025-06-28 | 2026-06-28 | 4/4 | Dr. Oren Levy | ⚠️ NO REFILLS |
+| 5 | Yossi Mizrachi | Amoxicillin | 2025-12-24 | 2026-01-07 | 0/1 (1 left) | Dr. Dana Cohen | ✅ ACTIVE |
+| 6 | Miriam Shapiro | Omeprazole | 2025-11-25 | 2026-11-25 | 1/6 (5 left) | Dr. Eitan Rosen | ✅ ACTIVE |
+| 7 | Miriam Shapiro | Amoxicillin | 2025-12-20 | 2025-12-30 | 0/0 | Dr. Eitan Rosen | ⚠️ NO REFILLS |
+| 8 | Avi Peretz | Amoxicillin | 2025-10-26 | 2025-11-05 | 0/0 | Dr. Nir Barak | ❌ EXPIRED |
+| 9 | Tamar Rosenberg | Omeprazole | 2025-12-15 | 2026-12-15 | 0/12 (12 left) | Dr. Hila Marcus | ✅ ACTIVE |
+| 10 | Dan Katz | Omeprazole | 2025-06-08 | 2026-06-08 | 3/5 (2 left) | Dr. Gadi Weiss | ✅ ACTIVE |
+| 11 | Dan Katz | Amoxicillin | 2025-09-16 | 2025-09-26 | 0/0 | Dr. Gadi Weiss | ❌ EXPIRED |
+| 12 | Noa Friedman | Omeprazole | 2025-11-10 | 2026-11-10 | 2/6 (4 left) | Dr. Shira Tal | ✅ ACTIVE |
+| 13 | David Cohen | Amoxicillin | 2025-09-26 | 2025-10-06 | 0/0 | Dr. Ruth Avraham | ❌ EXPIRED |
+| 14 | Sarah Levi | Omeprazole | 2025-12-10 | 2026-12-10 | 0/10 (10 left) | Dr. Avi Carmel | ✅ ACTIVE |
+| 15 | Yossi Mizrachi | Omeprazole | 2025-08-27 | 2026-08-27 | 4/8 (4 left) | Dr. Dana Cohen | ✅ ACTIVE |
+
+**Prescription Breakdown by Patient:**
+- **David Cohen** (2): 1 active Omeprazole, 1 expired Amoxicillin
+- **Sarah Levi** (2): 1 active Omeprazole, 1 no-refills Amoxicillin
+- **Michael Ben-Ari** (1): 1 expired Omeprazole
+- **Rachel Goldstein** (1): 1 no-refills Omeprazole
+- **Yossi Mizrachi** (2): 1 active Amoxicillin, 1 active Omeprazole
+- **Miriam Shapiro** (2): 1 active Omeprazole, 1 no-refills Amoxicillin
+- **Avi Peretz** (1): 1 expired Amoxicillin
+- **Tamar Rosenberg** (1): 1 active Omeprazole (12 refills!)
+- **Dan Katz** (2): 1 active Omeprazole, 1 expired Amoxicillin
+- **Noa Friedman** (1): 1 active Omeprazole
 
 ---
 
@@ -235,10 +260,31 @@ CREATE TABLE stock (
 | Omeprazole | 20 | 5 | 8 | **33** |
 | Vitamin D3 | 200 | 180 | 150 | **530** |
 
-**Stock Status:**
+**Complete Stock Records (All 15 Records):**
+
+| ID | Medication | Branch | Quantity | Last Updated | Status |
+|----|------------|--------|----------|--------------|--------|
+| 1 | Aspirin | Main Street | 150 | 2025-12-25 13:16 | ✅ High |
+| 2 | Aspirin | Downtown | 25 | 2025-12-25 13:16 | ✅ OK |
+| 3 | Aspirin | Airport | 10 | 2025-12-25 13:16 | ⚠️ Low |
+| 4 | Ibuprofen | Main Street | 80 | 2025-12-25 13:16 | ✅ High |
+| 5 | Ibuprofen | Downtown | 60 | 2025-12-25 13:16 | ✅ OK |
+| 6 | Ibuprofen | Airport | 40 | 2025-12-25 13:16 | ✅ OK |
+| 7 | Amoxicillin | Main Street | 30 | 2025-12-25 13:16 | ✅ OK |
+| 8 | Amoxicillin | Downtown | 15 | 2025-12-25 13:16 | ⚠️ Low |
+| 9 | Amoxicillin | Airport | **0** | 2025-12-25 13:16 | ❌ **OUT OF STOCK** |
+| 10 | Omeprazole | Main Street | 20 | 2025-12-25 13:16 | ⚠️ Low |
+| 11 | Omeprazole | Downtown | **5** | 2025-12-25 13:16 | ⚠️ **VERY LOW** |
+| 12 | Omeprazole | Airport | 8 | 2025-12-25 13:16 | ⚠️ Low |
+| 13 | Vitamin D3 | Main Street | 200 | 2025-12-25 13:16 | ✅ Excellent |
+| 14 | Vitamin D3 | Downtown | 180 | 2025-12-25 13:16 | ✅ Excellent |
+| 15 | Vitamin D3 | Airport | 150 | 2025-12-25 13:16 | ✅ Excellent |
+
+**Stock Status Summary:**
 - ✅ **High Stock**: Aspirin, Ibuprofen, Vitamin D3
-- ⚠️ **Low Stock**: Omeprazole (Downtown: 5 units)
+- ⚠️ **Low Stock**: Omeprazole (all branches under 20 units, Downtown only 5!)
 - ❌ **Out of Stock**: Amoxicillin at Airport branch
+- 📦 **Total Inventory**: 973 units across all medications and branches
 
 ---
 
