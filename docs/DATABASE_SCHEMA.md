@@ -478,12 +478,4 @@ See: `backend/utils/normalization.py`
 | 1.0 | 2025-12-25 | Initial schema with 5 tables |
 | 1.1 | 2025-12-25 | Added input normalization support |
 
----
-
-## Related Documentation
-
-- [Backend API Documentation](../backend/README.md)
-- [Database Seeding Guide](../backend/seed_data.py)
-- [Input Normalization](../backend/utils/normalization.py)
-- [Repository Layer](../backend/repositories/)
 
