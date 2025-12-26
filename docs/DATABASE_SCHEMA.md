@@ -438,10 +438,6 @@ SELECT * FROM users; # Query data
 .quit                # Exit
 ```
 
-### Access via GUI
-- **DB Browser for SQLite**: https://sqlitebrowser.org/
-- Open `backend/pharmacy.db` file directly
-
 ---
 
 ## Notes & Best Practices
@@ -468,14 +464,5 @@ Phone numbers and branch names support flexible matching:
 - Branch: `"Main Street"` = `"MainStreet"` = `"main-street"`
 
 See: `backend/utils/normalization.py`
-
----
-
-## Version History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | 2025-12-25 | Initial schema with 5 tables |
-| 1.1 | 2025-12-25 | Added input normalization support |
 
 
