@@ -123,7 +123,9 @@ TOOLS_SCHEMA: list[dict] = [
             "name": "list_user_prescriptions",
             "description": (
                 "List all prescriptions for a user, including medication name, expiry date, "
-                "and remaining refills. User must be identified first using get_user_profile. "
+                "and remaining refills. Each prescription includes a 'can_refill' field. "
+                "ONLY prescriptions with can_refill=true can be refilled. "
+                "User must be identified first using get_user_profile. "
                 "Use when user asks about their prescriptions or wants to see what they can refill."
             ),
             "parameters": {
@@ -149,8 +151,9 @@ TOOLS_SCHEMA: list[dict] = [
             "name": "request_prescription_refill",
             "description": (
                 "Submit a refill request for an existing prescription. "
-                "Validates that the prescription is active and has refills remaining. "
-                "User must be identified first. Use when user wants to refill a prescription."
+                "ONLY call this if can_refill=true for the prescription (checked via list_user_prescriptions). "
+                "Will fail if prescription is expired or has no refills remaining. "
+                "User must be identified first. Use ONLY when prescription can_refill=true."
             ),
             "parameters": {
                 "type": "object",
