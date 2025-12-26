@@ -1,6 +1,8 @@
 <!-- 8f1e0cfa-a99d-4ba1-802e-3575aa40e52c 63da102f-c7eb-499b-a88e-e56aa50a56df -->
 # Pharmacy Assistant Chat System - Implementation Plan
-
+## Note:
+This was the initial Design and planning of the AI Pharmacy Agent, Based on that info and the milestones mentioned in the end of this documentation the whole AI Agent was built.
+The plan is not 1 to 1 the end result as there were a few things I needed to change but I still wanted to add this document for clarity of how I approached this project :)
 ## A) Architecture Overview
 
 ### Components
