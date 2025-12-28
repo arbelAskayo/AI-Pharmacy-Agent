@@ -22,8 +22,9 @@ Edit `backend/.env` and set your API key:
 
 ```
 OPENAI_API_KEY=sk-your-actual-api-key-here
-OPENAI_MODEL=gpt-4o
+OPENAI_MODEL=gpt-5
 ```
+I personally recomend `gpt-4o mini` as `gpt-5` is pretty slow.
 
 ### 2. Build the Containers
 
