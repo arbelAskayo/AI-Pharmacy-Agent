@@ -4,7 +4,7 @@ AI powered pharmacist assistant for a retail pharmacy chain project.
 The agent able to serve customers through chat, using data from the pharmacy's internal data base ( once run you will see it under (backend/pharmacy.db) ).
 The system uses function calling to interact with the pharmacy data base, suppoerts bilingual conversations ( English and Hebrew ), and enforces strict guidlines to avoid providing medical advices.
 
-**See it in action:** Check out [conversation examples with screenshots](docs/SCREENTSHOTS.md)
+**See it in action:** Check out [conversation examples with screenshots](docs/SCREENSHOTS.md)
 
 ## Dev flow
 First I read the guidlnes and understood them. Then I took the mission guidlines to `Chat GPT` and together we understood it better and decided on the `Tech Stack`.
