@@ -6,16 +6,6 @@ The system uses function calling to interact with the pharmacy data base, suppoe
 
 **See it in action:** Check out [conversation examples with screenshots](docs/SCREENSHOTS.md)
 
-## Dev flow
-First I read the guidlnes and understood them. Then I took the mission guidlines to `Chat GPT` and together we understood it better and decided on the `Tech Stack`.
-Once I understood the mission and had the tech stack I created a plan for the mission and the architecture structure of the project in cursor with milestones as if cursor will do the whole plan in one prompt/chat it will start 
-hallucinate. [You can see the initial plan with Cursor here](docs/pharmacy-assistant-plan-8f1e0cfa.plan.md) 
-Once I had a draft plan and architecture structure I understood each milestone, devided it into sub tasks implement and test each milestone, [Can see the tests here](backend/tests).
-I built automated unit tests along with manually tests of eadge cases and bug fixed based on them.
-
-**Note:** Please use `gpt-4o mini` instead of `gpt-5` as each inference of `gpt-5` can be very slow.
-
-
 ## Tech Stack
 
 **Backend:**
